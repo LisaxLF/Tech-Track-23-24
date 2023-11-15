@@ -1,0 +1,71 @@
+@font-face {
+    font-family: 'Conthrax';
+    src: url('../src/fonts/conthrax-sb.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Sutherla';
+    src: url('../src/fonts/Sutherla-Romance-Sans-Serif.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Sutherla';
+    src: url('') format('opentype');
+}
+
+:root {
+    --button-main-color: #89FFFF;
+  }
+
+.main-page-content .home{
+    background: rgb(217,217,217);
+    background: linear-gradient(90deg, rgba(217, 217, 217, 0.1) 0%, rgba(0,0,0,0) 40%);
+    
+    /* width: fit-content;
+    margin: 6em;
+    padding: 2em; */
+}
+
+
+
+p {
+    color: rgba(255, 255, 255, 0.80);
+    line-height: 15px;
+    letter-spacing: 1px;
+    width: 50em;
+    font-family: "Conthrax";
+    font-size: .6em;
+    font-weight: normal;
+}
+
+h1 {
+    color: white;
+    font-family: 'Sutherla';
+    font-size: 4.5em;
+    letter-spacing: 8px;
+    line-height: 108%;
+    padding: 0;
+    margin: 0 0 0.5em 0;
+    font-weight: normal;
+}
+
+h2 {
+    color: white;
+    font-family: 'Sutherla';
+    font-size: 2em;
+    letter-spacing: 8px;
+    line-height: 108%;
+    padding: 0;
+    margin: 0 0 0.8em 0;
+    font-weight: normal;
+}
+
+h1 span, h2 span {
+    color: #89FFFF;
+}
+
+h3 {
+    color: #89FFFF;
+    font-family: "Conthrax";
+    font-size: .9em;
+}
