@@ -47,6 +47,7 @@ de Berlijnse Muur.
             gebruikte raketten in deze missies. Ik zal begrijpen welke landen het meest hebben geïnvesteerd in de opgegeven periodes, welke raketten werden ingezet voor deze missies en hoe deze investeringen en keuzes verband houden met de historische context van de Koude Oorlog en de nasleep van de val van 
             de Berlijnse Muur.
           </p>
+          <LabelsAbove labelText="All the launches during coldwar"/>
           <div>
             <BarChart/>
           </div>
