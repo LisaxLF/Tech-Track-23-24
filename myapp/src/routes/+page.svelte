@@ -2,6 +2,7 @@
     import LabelsAbove from '../components/labels.svelte';
     import BarChart from '../components/barChart.svelte';
     import Card from '../components/Cards.svelte';
+    
 
 </script>
   
@@ -15,8 +16,7 @@
           <span>MISSIONS</span>
         </h1>
         <p>
-            Tijdens die meeslepende jaren '80 en begin '90, toen de Koude Oorlog op z'n eind liep en de Berlijnse Muur als een kaartenhuis instortte, waren er een paar landen die zich volop stortten op ruimteverkenning. In mijn verhaal duik ik in de twee landen die toen het meest spendeerden aan ruimtemissies. 
-          </p>
+          "In the exciting years of the '80s and early '90s, as the Cold War was ending and the Berlin Wall fell, some countries got really into exploring space. In my story, I'll focus on the two countries that spent the most on space missions during that time."          </p>
       </section>
 
     <section class="main-page-content">
@@ -26,9 +26,24 @@
         </h2>
         <LabelsAbove labelText="MISSION INFORMATION"/>
         <p>
-            Ik wil een verhaal vertellen die gaat over de jaren 1989 (tijdens de Koude Oorlog) en 1991 (na de val van de Berlijnse Muur) welke drie landen het hoogste bedrag hebben uitgegeven aan ruimtemissies. Ik zal het aantal lanceringen in die jaren voor elk van deze landen analyseren, evenals de specifieke uitgavenbedragen en de gebruikte raketten in deze missies. Ik zal begrijpen welke landen het meest hebben geïnvesteerd in de opgegeven periodes, welke raketten werden ingezet voor deze missies en hoe deze investeringen en keuzes verband houden met de historische context van de Koude Oorlog en de nasleep van de val van 
-de Berlijnse Muur.
+          <span>Mission Title:</span> Operation Investigate Space Endeavors <br>
+          <span>Mission Duration:</span> 1947 - 1991 <br>
+          <span>Location:</span> Global, with focus on key space agencies <br>
         </p>
+        <p>
+          Mission Objectives:
+        </p>
+          <ul>
+            <li>
+              Look at what different countries spent on space stuff during 1947 to 1991, when things were tense during the Cold War and after the Berlin Wall fell.</li>
+            <li>
+              Find out which three countries used the most money on space missions.
+            </li>
+            <li>
+              Study how many times these countries sent stuff into space, how much they spent, and what kind of rockets they used.</li>
+            <li>
+              Understand why these countries spent a lot and what rockets they picked, considering the Cold War and what happened after the Berlin Wall fell.</li>
+          </ul>
 
         <section class='cards-holder'>
             <Card alt_text="none" image_url="src/images/war.jpg" header="Timezone" plaintext="Its 1989 the coldwar begun, everyone is scared the world is going to blow up in pieces"/>
@@ -77,8 +92,25 @@ de Berlijnse Muur.
       font-weight: normal;
     }
   
-    h1 span {
+    h1 span, span {
       color: #89FFFF;
+      font-weight: bold;
+    }
+
+    li {
+    color: rgba(255, 255, 255, 0.80);
+    line-height: 15px;
+    letter-spacing: 1px;
+    width: 50em;
+    font-family: "Conthrax";
+    font-size: .6em;
+    font-weight: normal;
+    }
+
+    ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
     }
   
     .main-page-content {
@@ -120,6 +152,5 @@ de Berlijnse Muur.
         justify-content: space-between;
         margin: 2em 0;
     }
-
   </style>
   

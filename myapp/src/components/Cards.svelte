@@ -29,6 +29,14 @@
   .text-holder{
     padding: 1em;
     height: 7.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  h3 {
+    margin: 0;
   }
 
   p {
