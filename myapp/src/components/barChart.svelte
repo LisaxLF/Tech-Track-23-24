@@ -1,13 +1,14 @@
 <script>
   import { onMount } from 'svelte';
+
   import * as d3 from 'd3';
   import moment from 'moment';
   import LabelsAbove from '../components/labels.svelte';
-  
+  import gsap from 'gsap';
+
+  let timelineAnimationComponent;
 
   let missiesColdwar = {};
-  
-  let uniqueCountriesNames = [];
   let lanceringenPerLand = {};
   let selectedFilter = "WholePeriod";
 
@@ -41,11 +42,9 @@
         selectedFilter = "WholePeriod";
         ChoosePeriodFilterMissions(coldWarStartDate, coldWarEndDate);
         ChangeCountLaunchesPeriods();
-        getUniqueCountries();
-        
+
         // loggen van de data, om te controleren of het werkt
         console.log(lanceringenPerLand);
-        console.log(uniqueCountriesNames);
         console.log(missiesColdwar);
       
         // Bijwerken van de visualisatie met nieuwe gegevens
@@ -55,12 +54,10 @@
       buttonPeriod1.addEventListener("click", async function() {
       selectedFilter = "Period1";
       ChoosePeriodFilterMissions(coldWarPeriod1StartDate, coldWarPeriod1EndDate);
-      ChangeCountLaunchesPeriods();
-      getUniqueCountries(); 
+      ChangeCountLaunchesPeriods(); 
 
       // loggen van de data, om te controleren of het werkt
       console.log(lanceringenPerLand);
-      console.log(uniqueCountriesNames);
       console.log(missiesColdwar);
 
       // Bijwerken van de visualisatie met nieuwe gegevens
@@ -71,11 +68,9 @@
       selectedFilter = "Period2";
       ChoosePeriodFilterMissions(coldWarPeriod2StartDate, coldWarPeriod2EndDate);
       ChangeCountLaunchesPeriods();
-      getUniqueCountries();
 
       // loggen van de data, om te controleren of het werkt
       console.log(lanceringenPerLand);
-      console.log(uniqueCountriesNames);
       console.log(missiesColdwar);
 
       // Bijwerken van de visualisatie met nieuwe gegevens
@@ -86,11 +81,9 @@
       selectedFilter = "Period3";
       ChoosePeriodFilterMissions(coldWarPeriod3StartDate, coldWarPeriod3EndDate);
       lanceringenPerLand = ChangeCountLaunchesPeriods();
-      getUniqueCountries();
       
       // loggen van de data, om te controleren of het werkt
       console.log(lanceringenPerLand);
-      console.log(uniqueCountriesNames);
       console.log(missiesColdwar);
 
       // Bijwerken van de visualisatie met nieuwe gegevens
@@ -126,24 +119,14 @@
     // Functie om alleen de naam van het land uit "Location" te extraheren
     function extractCountryName(location) {
         if (typeof location === 'string' && location.includes(',')) {
-          const locationCityParts = location.split(",");
-          const CountryPart = locationCityParts[locationCityParts.length - 1].trim();
+          const locationParts = location.split(",");
+          const CountryPart = locationParts[locationParts.length - 1].trim();
           return CountryPart;
         } else {
           return location;
         }
     }
 
-    function getUniqueCountries() {
-      missiesColdwar.forEach(item => {
-      const country = extractCountryName(item.Location);
-      if (country && !uniqueCountriesNames.includes(country)) {
-        uniqueCountriesNames.push(country);
-      }
-
-      return uniqueCountriesNames;
-    });
-}
     // Functie om de D3-visualisatie te maken
     const width = innerWidth;
     const height = 600;
@@ -179,7 +162,8 @@
       .style("font-size", "10px")
       .style("padding", "10px")
       .style("border-radius", "5px")
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .style("user-select", "none");
 
     // Functie om de D3-visualisatie bij te werken met nieuwe data
     function updateVisualization(missiedata) {
@@ -211,6 +195,30 @@
                   return colorScale(launches);
                 })
                 .style("stroke", "transparent")
+                .on("click", function (event, d) {
+                    if (d.properties.ADMIN === "United States of America") {
+                      console.log("Het werkt, het is de USA");
+                      const infoUSAElem = document.querySelector(".InformationUSA");
+                      const terugKnop = document.getElementById('terugKnop');
+                      console.log(infoUSAElem);
+                      console.log(terugKnop);
+                      const timeline = gsap.timeline();
+
+                      // Toon de informatie van de Verenigde Staten
+                      timeline
+                        .set(infoUSAElem, { opacity: 1, zIndex: 10 })
+                        .from(infoUSAElem.querySelector("h2"), { duration: 1.5, x: "-100%", opacity: 1, ease: "power2.out" }, "-=0.3")
+                        .from(infoUSAElem.querySelector("p"), { duration: 1.5, y: "-100%", opacity: 1, ease: "power2.out" }, "-=1.7")
+                        .from(infoUSAElem.querySelector(".CardsHolder"), { duration: 1.5, y: "100%", opacity: 1, ease: "power2.out" }, "-=0.3");
+
+                      // Terugknop event listener om de informatie van de Verenigde Staten te verbergen
+                      terugKnop.addEventListener('click', () => {
+                        timeline
+                          .to(infoUSAElem, { opacity: 0, zIndex: -10, duration: 0.5})
+                          .set(infoUSAElem, { opacity: 0, zIndex: -1});
+                      });
+                    }
+                })
                 .on("mouseover", function (event, d) {
                   const countryName = d.properties.ADMIN;
                   const launches = lanceringenPerLand[countryName] || 0;
@@ -262,16 +270,30 @@
   });
 </script>
 
-<svg id="worldmap"></svg>
-<fieldset class="filtering">
-  <legend>FILTER THROUGH TIME</legend>
-  <div id="buttonHolder">
-    <input type="button" id="WholePeriod" value="WholePeriod" checked/>
-    <input type="button" id="Period1" value="Period1"/>
-    <input type="button" id="Period2" value="Period2"/>
-    <input type="button" id="Period3" value="Period3"/>
-  </div>
-</fieldset>
+<div class="SVG">
+  <svg id="worldmap"></svg>
+  <fieldset class="filtering">
+    <legend>FILTER THROUGH TIME</legend>
+    <div id="buttonHolder">
+      <input type="button" id="WholePeriod" value="WholePeriod" checked/>
+      <input type="button" id="Period1" value="Period1"/>
+      <input type="button" id="Period2" value="Period2"/>
+      <input type="button" id="Period3" value="Period3"/>
+    </div>
+  </fieldset>
+  <article class="InformationUSA">
+    <input type="button" id="terugKnop" value="Terug"/>
+    <h2>
+      _SPACE MISSON <br>
+      <span>USA</span>
+    </h2>
+    <p>
+      The United States of America (USA), commonly known as the United States (U.S. or US) or America, is a country primarily located in North America. It consists of 50 states, a federal district, five major self-governing territories, 326 Indian reservations, and some minor possessions.[g] At 3.8 million square miles (9.8 million square kilometers), it is the world's third- or fourth-largest country by total area.[d] With a population of over 328 million, it is the third most populous country in the world. The national capital is Washington, D.C., and the most populous city is New York City.
+    </p>
+    <div class="CardsHolder">
+    </div>
+  </article> 
+</div>
 
 <style>
     input[type="radio"] {
@@ -296,6 +318,7 @@
       font-family: "Conthrax";
       border-radius: 1em;
       width: fit-content;
+      user-select: none;
     }
 
     label {
@@ -322,4 +345,35 @@
       background: rgba(137, 255, 255, 0.408);
       transition: 100ms linear;
     }
+
+    /* terug knop */
+    .InformationUSA > input[type="button"] {
+      position: absolute;
+      top: 10%;
+      right: 5%;
+    }
+
+    .InformationUSA {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(90deg, rgb(137 255 255 / 30%) 0%, rgb(255 255 255 / 0%) 100%);
+        backdrop-filter: blur(47px);
+        padding: 0 4em;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        opacity: 0;
+        z-index: -1;
+        user-select: none;
+      }
+    
+    .CardsHolder {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
 </style>

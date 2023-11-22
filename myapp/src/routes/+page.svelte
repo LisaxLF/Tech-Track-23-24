@@ -2,7 +2,7 @@
     import LabelsAbove from '../components/labels.svelte';
     import BarChart from '../components/barChart.svelte';
     import Card from '../components/Cards.svelte';
-    
+
 
 </script>
   
@@ -20,6 +20,7 @@
       </section>
 
     <section class="main-page-content">
+      <article>
         <h2>
           _SPACE <br>
           <span>ASSIGNMENT</span>
@@ -44,7 +45,7 @@
             <li>
               Understand why these countries spent a lot and what rockets they picked, considering the Cold War and what happened after the Berlin Wall fell.</li>
           </ul>
-
+      </article>
         <section class='cards-holder'>
             <Card alt_text="none" image_url="src/images/war.jpg" header="Timezone" plaintext="Its 1989 the coldwar begun, everyone is scared the world is going to blow up in pieces"/>
             <Card alt_text="none" image_url="src/images/earth.jpg" header="Countries" plaintext="The big countries USA and Russia are the ones with the most money which one will find the most habited place first"/>
@@ -114,7 +115,6 @@
     }
   
     .main-page-content {
-        height: 100vh;
         width: 100vw;
         box-sizing: border-box;
         padding: 0 4em;
@@ -126,23 +126,24 @@
 
     .main-page-content:nth-of-type(1) {
         position: relative;
+        height: 100vh;
     }
 
     .main-page-content:nth-of-type(2) {
-        height: fit-content;
+        height: 100vh;
         width: 100vw;
     }
 
     .main-page-content:nth-of-type(3) {
         position: relative;
+        height: fit-content;
     }
 
     .spacebal {
-        position: absolute;
         z-index: -10;
-        left: -30%;
-        height: 100%;
-        object-fit: contain;
+        position: absolute;
+        left: -50%;
+        top: 0;
     }
 
     .cards-holder{
