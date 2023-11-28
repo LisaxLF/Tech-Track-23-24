@@ -1,0 +1,207 @@
+// Functie om de D3-visualisatie te maken
+const width = 800;
+const height = 400;
+
+const svg = d3.select("#worldmap")
+  .attr("width", width)
+  .attr("height", height);
+
+const projection = d3.geoMercator()
+  .scale(140)
+  .translate([width / 2.5, height / 1.6]);
+
+const path = d3.geoPath().projection(projection);
+
+// Laad en toon de wereldkaart
+d3.json("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson").then(function (data) {
+  // Render de kaart
+  svg.selectAll("path")
+    .data(data.features)
+    .enter().append("path")
+    .attr("class", "country")
+    .attr("fill", "#89ffff33")
+    .attr("d", path);
+});
+
+// Tooltip element
+const tooltip = d3.select("body")
+  .append("div")
+  .style("position", "absolute")
+  .style("background-color", "black")
+  .style("color", "white")
+  .style("font-family", "Conthrax")
+  .style("font-size", "10px")
+  .style("padding", "10px")
+  .style("border-radius", "5px")
+  .style("opacity", 0)
+  .style("user-select", "none");
+
+// Functie om de D3-visualisatie bij te werken met nieuwe data
+function updateVisualization(missiedata) {
+  try {
+    d3.json("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson").then(function (data) {
+    // Filter de GeoJSON-gegevens op basis van landen in je dataset
+    const filteredData = data.features.filter(feature => {
+      const countryName = feature.properties.ADMIN;
+      const isInLanceringenPerLand = Object.keys(lanceringenPerLand).includes(countryName);
+      if (isInLanceringenPerLand) {
+        console.log("Gefilterd land:", countryName); // Log de Admin-naam van het gefilterde land
+      }
+      return isInLanceringenPerLand; // Retourneer true of false gebaseerd op de voorwaarde
+    });
+
+      const maxLaunches = d3.max(Object.values(lanceringenPerLand));
+      console.log('Max aantal lanceringen:', maxLaunches);
+
+      // Kleurenschaal voor de legenda
+      const colorScale = d3.scaleLinear()
+        .domain([0, maxLaunches])
+        .range(['#3293A8', '#182C72'])
+
+      svg.selectAll(".country-marked")
+      .data(filteredData)
+      .join(
+        enter => enter.append("path")
+          .attr("class", "country-marked")
+          .attr("d", path)
+          .attr("fill", function (d) {
+            const countryName = d.properties.ADMIN;
+            const launches = lanceringenPerLand[countryName] || 0;
+            return colorScale(launches);
+          })
+          .style("stroke", "transparent")
+          .on("click", function (event, d) {
+              if (d.properties.ADMIN === "United States of America") {
+                console.log("Het werkt, het is de USA");
+
+                // informatie van de USA
+                const infoUSAElem = document.querySelector(".InformationUSA");
+                const terugKnop = document.getElementById('terugKnop');
+                const Rocketinfo = document.querySelector(".rockets");
+
+                const timeline = gsap.timeline();
+                
+                // rakketten van de USA
+                const titan = document.getElementById("titan");
+                const atlas = document.getElementById("atlas");
+
+                const tl = gsap.timeline({ repeat: -1 });
+
+                // Toon de informatie van de Verenigde Staten
+                timeline
+                  .set(infoUSAElem, { opacity: 1, zIndex: 10 })
+                  .from(infoUSAElem.querySelector("h2"), { duration: 1.5, x: "-100%", opacity: 1, ease: "power2.out" }, "-=0.3")
+                  .from(infoUSAElem.querySelector("p"), { duration: 1.5, y: "-100%", opacity: 1, ease: "power2.out" }, "-=1.7")
+                  .from(infoUSAElem.querySelector(".rockets"), { duration: 2, x: "200%", opacity: 1, ease: "power2.out" }, "-=2")
+                  .from(infoUSAElem.querySelector(".infoContent"), { duration: 1.5, y: "100%", opacity: 1, ease: "power2.out" }, "-=1.7")
+                  .from(infoUSAElem.querySelector(".CardsHolder"), { duration: 1.5, y: "100%", opacity: 1, ease: "power2.out" }, "-=0.3");
+                  
+                // Terugknop event listener om de informatie van de Verenigde Staten te verbergen
+                terugKnop.addEventListener('click', () => {
+                  timeline
+                    .to(infoUSAElem, { opacity: 0, zIndex: -10, duration: 0.5})
+                    .set(infoUSAElem, { opacity: 0, zIndex: -1});
+                });
+
+              tl
+              .set(titan, { opacity: 1 })
+              .to(titan.querySelector("#thruster_left"), { duration: 1.5, x: "-20", y:"20", ease: "easeInOut"}, "-=.5")
+              .to(titan.querySelector("#thruster_right"), { duration: 1.5, x: "20", y:"20", ease: "easeInOut"}, "-=.3")
+              .to(titan.querySelector("#pod"), { duration: 1.5, y: "-20", ease: "easeInOut" }, "-=.3")
+              .to(titan.querySelector("#Rockets_left"), { duration: 1.5, x: "-20", ease: "easeInOut" }, "-=.3")
+              .to(titan.querySelector("#Rockets_right"), { duration: 1.5, x: "20", ease: "easeInOut" }, "-=.3")
+              .to(titan.querySelector("#nozzle"), { duration: 1.5, y: "20", ease: "easeInOut" }, "-=.3")
+              // atlas
+              .set(atlas, { display: "block", opacity: 1 })
+              .to(atlas.querySelector("#thruster_left"), { duration: 1.5, x: "-20", y:"20", ease: "easeInOut" }, "-=.5")
+              .to(atlas.querySelector("#thruster_right"), { duration: 1.5, x: "20", y:"20", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#pod"), { duration: 1.5, y: "-20", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#rocket_left"), { duration: 1.5, x: "-20", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#rocket_right"), { duration: 1.5, x: "20", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#nozzle"), { duration: 1.5, y: "20", ease: "easeInOut" }, "-=.3")
+
+              // titan terug op plek
+              .to(titan.querySelector("#nozzle"), { duration: 1, y: "0", ease: "easeInOut" }, "-=.3")
+              .to(titan.querySelector("#Rockets_right"), { duration: 1, x: "0", ease: "easeInOut" }, "-=.3")
+              .to(titan.querySelector("#Rockets_left"), { duration: 1, x: "0", ease: "easeInOut" }, "-=.3")
+              .to(titan.querySelector("#pod"), { duration: 1, y: "0", ease: "easeInOut" }, "-=.3")
+              .to(titan.querySelector("#thruster_right"), { duration: 1, x: "0", y:"0", ease: "easeInOut" }, "-=.3")
+              .to(titan.querySelector("#thruster_left"), { duration: 1, x: "0", y:"0", ease: "easeInOut" }, "-=.5")
+              .to(titan, {opacity: 1, duration: 1, ease: "easeInOut" }, "-=.3")
+              // atlas terug op plek
+              .to(atlas.querySelector("#nozzle"), { duration: 1, y: "0", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#rocket_right"), { duration: 1, x: "0", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#rocket_left"), { duration: 1, x: "0", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#pod"), { duration: 1, y: "0", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#thruster_right"), { duration: 1, x: "0", y:"0", ease: "easeInOut" }, "-=.3")
+              .to(atlas.querySelector("#thruster_left"), { duration: 1, x: "0", y:"0", ease: "easeInOut" }, "-=.5")
+              .to(atlas, {opacity: 1, duration: 1, ease: "easeInOut" }, "-=.3")
+
+              // Animatie voor het op en neer bewegen van de raket
+              tl.to(atlas, {
+                y: -5, // Verkleinde afstand
+                duration: 2,
+                ease: "easeInOut", // Ander easing-type, zoals easeInOut
+                repeat: -1,
+                yoyo: true // Terugkeren naar oorspronkelijke positie
+              });
+
+              // Animatie voor het op en neer bewegen van de raket
+              tl.to(titan, {
+                y: -5, // Verkleinde afstand
+                duration: 2,
+                ease: "easeInOut", // Ander easing-type, zoals easeInOut
+                repeat: -1,
+                yoyo: true // Terugkeren naar oorspronkelijke positie
+              });
+                tl.play();
+              }
+          })
+          .on("mouseover", function (event, d) {
+            const countryName = d.properties.ADMIN;
+            const launches = lanceringenPerLand[countryName] || 0;
+            tooltip.style("opacity", 1)
+              .html(`<strong>${countryName}</strong><br>Launches: ${launches}`)
+
+            // Verandering van de randkleur en -dikte tijdens hover
+            d3.select(this)
+              .style('stroke', 'white')
+              .style('stroke-width', '1px');
+          })
+          .on("mousemove", function (event) {
+            tooltip.style("left", event.pageX + 15 + "px")
+              .style("top", event.pageY + 15 + "px");
+          })
+          .on("mouseout", function () {
+            tooltip.style("opacity", 0);
+
+            // Zet de oorspronkelijke randkleur en -dikte terug
+            d3.select(this)
+              .style('stroke', 'transparent')
+          })
+          .style("fill", "rgba(137, 255, 255, 0)") // startkleur
+          .transition()
+          .duration(750)
+          .style("fill", function (d) {
+            const countryName = d.properties.ADMIN;
+            const launches = lanceringenPerLand[countryName] || 0;
+            return colorScale(launches);
+          }),
+        update => update // Hier kan ik transitie toevoegen als ik de visualisatie wil bijwerken
+          .transition()
+          .duration(250) // Duur van de overgang in milliseconden
+          .style("fill", function (d) {
+            const countryName = d.properties.ADMIN;
+            const launches = lanceringenPerLand[countryName] || 0;
+            return colorScale(launches);
+          }),
+        exit => exit // Hier kan ik transitie toevoegen als ik de visualisatie wil verwijderen
+          .transition()
+          .duration(250) // Duur van de overgang in milliseconden
+          .style("fill", "rgba(137, 255, 255, 0)") // eindkleur
+          .remove()
+      );
+    });
+  } catch (error) {
+    console.error('Fout bij het bijwerken van de visualisatie:', error);
+  }

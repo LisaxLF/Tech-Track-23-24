@@ -10,24 +10,27 @@
     background: linear-gradient(90deg, rgba(137, 255, 255, 0.218) 0%, rgba(255, 255, 255, 0.234) 60%);
     border-radius: 25px;
     border: 1px solid rgba(137, 255, 255, 0.153);
-    width: 30%;
+    width: 100%;
     backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    max-width: 350px;
+    gap: 1em;
   }
 
   .image-holder{
-    height: 8em;
+    padding-left: 0.5em;
   }
 
   .image-holder img {
     object-fit: cover;
-    width: 100%;
-    height: 100%;
-    border-top-right-radius: 25px;
-    border-top-left-radius: 25px;
+    width: 6em;
+    height: 6em;
+    border-radius: 50%;
   }
 
   .text-holder{
-    padding: 1em;
+    padding: 1em 0.5em;
     height: 7.5em;
     display: flex;
     flex-direction: column;
