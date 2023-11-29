@@ -1,6 +1,6 @@
 <script>
     import LabelsAbove from '../components/labels.svelte';
-    import BarChart from '../components/barChart.svelte';
+    import Worldmap from '../components/Worldmap.svelte';
     import Card from '../components/Cards.svelte';
     import '../global.css'
 </script>
@@ -54,7 +54,7 @@
       Explore our interactive world map visualization showcasing space missions during the Cold War era. Dive into historical data and filter missions by time periods. Click on the United States for detailed information about American missions, unveiling crucial insights and significant contributions made during this iconic period of space exploration    </p>
     <LabelsAbove labelText="All the launches during coldwar"/>
     <div>
-      <BarChart/>
+      <Worldmap/>
     </div>
   </section>
 </main>
@@ -66,6 +66,7 @@
       padding: 0;
       margin: 0;
       box-sizing: border-box;
+      overflow-x: hidden;
       /* display: flex;
       overflow: hidden; */
     }
@@ -102,6 +103,17 @@
     padding: 0;
     list-style-type: none;
     }
+
+    main {
+      /* scroll snap */
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      scroll-behavior: smooth;
+
+      & > section {
+        scroll-snap-align: start;
+      }
+    }
   
     .main-page-content {
         width: 100vw;
@@ -111,6 +123,7 @@
         justify-content: center;
         flex-direction: column;
         margin-bottom: 4em;
+
     }
 
     .main-page-content:nth-of-type(1) {
@@ -132,6 +145,7 @@
       height: fit-content;
       align-items: center;
       gap: 0.5em;
+      padding: 2em 0;
     }
 
     .main-page-content:nth-of-type(3) > p {
@@ -160,6 +174,46 @@
       gap: 1em;
       align-items: center;
     }
+
+    /* responsive mobile */
+@media only screen and (max-width: 600px) {
+    .main-page-content {
+        width: 100%;
+        padding: 0 2em;
+    }
+
+    .main-page-content:nth-of-type(1) {
+        height: 100vh;
+    }
+
+    .main-page-content:nth-of-type(2) {
+      height: fit-content;
+      padding-top: 4em;
+      flex-direction: column;
+    }
+
+    .main-page-content:nth-of-type(3) {
+      height: fit-content;
+      align-items: center;
+      gap: 0.5em;
+      padding: 4em 2em;
+    }
+
+    h1 {
+        font-size: 2em;
+        letter-spacing: 4px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+        letter-spacing: 4px;
+    }
+
+    p, li {
+        font-size: .6em;
+        width: 100%;
+    }
+}
 
   </style>
   <slot />

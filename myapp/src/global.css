@@ -106,3 +106,33 @@ h3 {
     font-size: .9em;
 }
 
+/* responsive mobile */
+@media only screen and (max-width: 600px) {
+    .main-page-content {
+        width: 100%;
+        padding: 0.5em;
+    }
+
+    .spaceman {
+        position: absolute;
+        z-index: -10;
+        bottom: 0px;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    h1 {
+        font-size: 2em;
+        letter-spacing: 4px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+        letter-spacing: 4px;
+    }
+
+    p {
+        font-size: .6em;
+        width: 100%;
+    }
+}
